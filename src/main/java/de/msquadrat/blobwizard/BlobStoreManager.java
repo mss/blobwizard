@@ -11,6 +11,7 @@ import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
@@ -79,7 +80,7 @@ public class BlobStoreManager implements Managed {
         }
         
         @Deprecated
-        private Object notImplemented(String method, String container, String path) {
+        private Optional<Object> notImplemented(String method, String container, String path) {
             LOGGER.info("{} {}:{}", method, container, path);
             throw new NotImplementedException(method);
         }
@@ -88,7 +89,7 @@ public class BlobStoreManager implements Managed {
             notImplemented("PUT", container, path);
         }
         
-        public Object get(String container, String path) {
+        public Optional<Object> get(String container, String path) {
             return notImplemented("GET", container, path);
         }
         

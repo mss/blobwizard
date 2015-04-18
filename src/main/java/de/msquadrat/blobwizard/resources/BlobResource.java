@@ -41,7 +41,11 @@ public class BlobResource {
     public Object getBlob(@PathParam("store") String store,
             @PathParam("container") String container,
             @PathParam("path") String path) {
-        return getStore(store).get(container, path);
+        Object blob = getStore(store).get(container, path).orNull();
+        if (blob == null) {
+            throw new NotFoundException();
+        }
+        return blob;
     }
 
     @DELETE
