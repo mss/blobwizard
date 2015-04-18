@@ -1,15 +1,13 @@
 package de.msquadrat.blobwizard.resources;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.lang3.NotImplementedException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,8 +16,6 @@ import com.codahale.metrics.annotation.Timed;
 import de.msquadrat.blobwizard.BlobStoreManager;
 
 @Path("/blob/{store}/{path:.+}")
-@Produces(MediaType.APPLICATION_OCTET_STREAM)
-@Consumes(MediaType.APPLICATION_OCTET_STREAM)
 public class BlobResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlobResource.class);
     
