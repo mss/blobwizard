@@ -21,12 +21,13 @@ import io.dropwizard.lifecycle.Managed;
 public class BlobStoreManager implements Managed {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlobStoreManager.class);
     
-    final Map<String, Store> stores = new HashMap<>();
+    private final Map<String, Store> stores = new HashMap<>();
     
     
     public BlobStoreManager(ServerConfiguration config) {
         for (Map.Entry<String, ServerConfiguration.Store> store : config.getStores().entrySet()) {
-            stores.put(store.getKey(), new Store(store.getValue()));
+            String name = store.getKey();
+            stores.put(name, new Store(name, store.getValue()));
         }
     }
     
@@ -50,13 +51,16 @@ public class BlobStoreManager implements Managed {
 
     
     public class Store implements Managed {
+        private final String name;
         private final BlobStoreContext context;
 
-        public Store(ServerConfiguration.Store config) {
+        public Store(String name, ServerConfiguration.Store config) {
+            this.name = name;
+            
             Properties overrides = new Properties();
             for (Map.Entry<String, String> option : config.getOptions().entrySet()) {
-                String name = "jclouds." + option.getKey();
-                overrides.put(name, option.getValue());
+                String key = "jclouds." + option.getKey();
+                overrides.put(key, option.getValue());
             }
 
             Iterable<Module> modules = ImmutableSet.<Module>of(new SLF4JLoggingModule());
@@ -72,16 +76,18 @@ public class BlobStoreManager implements Managed {
         
         @Override
         public void start() throws Exception {
+            LOGGER.info("Started store {}", name);
         }
 
         @Override
         public void stop() throws Exception {
             context.close();
+            LOGGER.info("Stopped store {}", name);
         }
         
         @Deprecated
         private Optional<Object> notImplemented(String method, String container, String path) {
-            LOGGER.info("{} {}:{}", method, container, path);
+            LOGGER.info("{}.{} {}:{}", name, method, container, path);
             throw new NotImplementedException(method);
         }
         
@@ -90,7 +96,7 @@ public class BlobStoreManager implements Managed {
         }
         
         public Optional<Object> get(String container, String path) {
-            return notImplemented("GET", container, path);
+            return notImplemented("PUT", container, path);
         }
         
         public void delete(String container, String path) {
