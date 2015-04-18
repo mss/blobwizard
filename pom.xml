@@ -16,6 +16,7 @@
     <inceptionYear>2015</inceptionYear>
 
     <properties>
+        <jclouds.version>1.9.0</jclouds.version>
         <dropwizard.version>0.8.1</dropwizard.version>
 
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -25,6 +26,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.jclouds</groupId>
+            <artifactId>jclouds-all</artifactId>
+            <version>${jclouds.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
