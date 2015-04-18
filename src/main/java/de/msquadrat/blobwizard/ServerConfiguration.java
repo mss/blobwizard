@@ -25,11 +25,35 @@ public class ServerConfiguration extends Configuration {
     public static class Store {
         @JsonProperty
         @NotEmpty
-        private final String api = null;
+        private String api;
         
         @JsonProperty
+        private String identity;
+        
+        @JsonProperty
+        private String credential;
+        
+        @JsonProperty
+        private Map<String, String> options;
+        
+        
         public String getApi() {
             return api;
+        }
+        
+        public String getIdentity() {
+            return identity;
+        }
+        
+        public String getCredential() {
+            return credential;
+        }
+        
+        public Map<String, String> getOptions() {
+            if (options == null) {
+                return Collections.emptyMap();
+            }
+            return Collections.unmodifiableMap(options);
         }
     }
 }

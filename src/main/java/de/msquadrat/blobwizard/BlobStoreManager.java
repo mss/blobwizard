@@ -2,10 +2,15 @@ package de.msquadrat.blobwizard;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.commons.lang3.NotImplementedException;
+import org.jclouds.ContextBuilder;
+import org.jclouds.blobstore.BlobStoreContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 
 import io.dropwizard.lifecycle.Managed;
 
@@ -41,8 +46,20 @@ public class BlobStoreManager implements Managed {
 
     
     public class Store implements Managed {
+        private final BlobStoreContext context;
+
         public Store(ServerConfiguration.Store config) {
-            // TODO
+            Properties overrides = new Properties();
+            for (Map.Entry<String, String> option : config.getOptions().entrySet()) {
+                String name = option.getKey(); // TODO
+                overrides.put(name, option.getValue());
+            }
+
+            ContextBuilder builder = ContextBuilder.newBuilder(config.getApi()).overrides(overrides);
+            if (!Strings.isNullOrEmpty(config.getIdentity())) {
+                builder.credentials(config.getIdentity(), config.getCredential());
+            }
+            context = builder.build();
         }
         
         @Override
@@ -51,6 +68,7 @@ public class BlobStoreManager implements Managed {
 
         @Override
         public void stop() throws Exception {
+            context.close();
         }
         
         @Deprecated
