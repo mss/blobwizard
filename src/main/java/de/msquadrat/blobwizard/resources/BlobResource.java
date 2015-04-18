@@ -11,12 +11,14 @@ import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
 
+import de.msquadrat.blobwizard.BlobStoreManager;
+
 @Path("/blob/{store}")
 @Produces(MediaType.APPLICATION_OCTET_STREAM)
 @Consumes(MediaType.APPLICATION_OCTET_STREAM)
 public class BlobResource {
     
-    public BlobResource() {
+    public BlobResource(BlobStoreManager storeManager) {
     }
     
     @PUT

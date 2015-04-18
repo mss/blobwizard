@@ -65,8 +65,10 @@ public class Server extends Application<ServerConfiguration> {
     
     @Override
     public void run(ServerConfiguration config, Environment env) throws Exception {
-        // TODO: add BlobManager
-        env.jersey().register(new BlobResource());
+        final BlobStoreManager storeManager = new BlobStoreManager(config);
+        env.lifecycle().manage(storeManager);
+        
+        env.jersey().register(new BlobResource(storeManager));
     }
     
     @Override
