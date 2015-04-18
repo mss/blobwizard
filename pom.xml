@@ -16,6 +16,8 @@
     <inceptionYear>2015</inceptionYear>
 
     <properties>
+        <dropwizard.version>0.8.1</dropwizard.version>
+
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,6 +25,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-core</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
