@@ -31,7 +31,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.jclouds</groupId>
-            <artifactId>jclouds-all</artifactId>
+            <artifactId>jclouds-allblobstore</artifactId>
             <version>${jclouds.version}</version>
         </dependency>
         <dependency>
