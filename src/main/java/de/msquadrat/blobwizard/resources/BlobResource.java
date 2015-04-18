@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.codahale.metrics.annotation.Timed;
 
-@Path("/store/{store}")
+@Path("/blob/{store}")
 @Produces(MediaType.APPLICATION_OCTET_STREAM)
 @Consumes(MediaType.APPLICATION_OCTET_STREAM)
 public class BlobResource {
