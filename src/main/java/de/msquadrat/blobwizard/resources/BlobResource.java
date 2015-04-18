@@ -9,6 +9,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,22 +26,28 @@ public class BlobResource {
     public BlobResource(BlobStoreManager storeManager) {
     }
     
+    @Deprecated
+    private Object notImplemented(String method, String store, String path) {
+        LOGGER.info("{} on store <{}> via path <{}>", method, store, path);
+        throw new NotImplementedException(method);
+    }
+    
     @PUT
     @Timed
     public void putBlob(@PathParam("store") String store, @PathParam("path") String path) {
-        
+        notImplemented("PUT", store, path);
     }
     
     @GET
     @Timed
     public Object getBlob(@PathParam("store") String store, @PathParam("path") String path) {
-        return null;
+        return notImplemented("GET", store, path);
     }
     
     @DELETE
     @Timed
     public void deleteBlob(@PathParam("store") String store, @PathParam("path") String path) {
-        
+        notImplemented("DELETE", store, path);
     }
 
 }
