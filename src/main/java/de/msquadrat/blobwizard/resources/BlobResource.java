@@ -15,12 +15,11 @@ import de.msquadrat.blobwizard.BlobStoreManager.Store;
 @Path("/blob/{store}/{path:.+}")
 public class BlobResource {
     private final BlobStoreManager stores;
-    
+
     public BlobResource(BlobStoreManager storeManager) {
         stores = storeManager;
     }
-    
-    
+
     private Store getStore(String name) {
         Store store = stores.get(name);
         if (store == null) {
@@ -28,24 +27,29 @@ public class BlobResource {
         }
         return store;
     }
-    
-    
+
     @PUT
     @Timed
-    public void putBlob(@PathParam("store") String store, @PathParam("path") String path, Object data) {
-        getStore(store).put(path, data);
+    public void putBlob(@PathParam("store") String store,
+            @PathParam("container") String container,
+            @PathParam("path") String path, Object data) {
+        getStore(store).put(container, path, data);
     }
-    
+
     @GET
     @Timed
-    public Object getBlob(@PathParam("store") String store, @PathParam("path") String path) {
-        return getStore(store).get(path);
+    public Object getBlob(@PathParam("store") String store,
+            @PathParam("container") String container,
+            @PathParam("path") String path) {
+        return getStore(store).get(container, path);
     }
-    
+
     @DELETE
     @Timed
-    public void deleteBlob(@PathParam("store") String store, @PathParam("path") String path) {
-        getStore(store).delete(path);
+    public void deleteBlob(@PathParam("store") String store,
+            @PathParam("container") String container,
+            @PathParam("path") String path) {
+        getStore(store).delete(container, path);
     }
 
 }

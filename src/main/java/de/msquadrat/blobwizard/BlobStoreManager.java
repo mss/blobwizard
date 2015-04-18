@@ -7,10 +7,13 @@ import java.util.Properties;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jclouds.ContextBuilder;
 import org.jclouds.blobstore.BlobStoreContext;
+import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
 
 import io.dropwizard.lifecycle.Managed;
 
@@ -51,15 +54,19 @@ public class BlobStoreManager implements Managed {
         public Store(ServerConfiguration.Store config) {
             Properties overrides = new Properties();
             for (Map.Entry<String, String> option : config.getOptions().entrySet()) {
-                String name = option.getKey(); // TODO
+                String name = "jclouds." + option.getKey();
                 overrides.put(name, option.getValue());
             }
 
-            ContextBuilder builder = ContextBuilder.newBuilder(config.getApi()).overrides(overrides);
+            Iterable<Module> modules = ImmutableSet.<Module>of(new SLF4JLoggingModule());
+            
+            ContextBuilder builder = ContextBuilder.newBuilder(config.getApi())
+                    .modules(modules)
+                    .overrides(overrides);
             if (!Strings.isNullOrEmpty(config.getIdentity())) {
                 builder.credentials(config.getIdentity(), config.getCredential());
             }
-            context = builder.build();
+            context = builder.buildView(BlobStoreContext.class);
         }
         
         @Override
@@ -72,21 +79,21 @@ public class BlobStoreManager implements Managed {
         }
         
         @Deprecated
-        private Object notImplemented(String method, String path) {
-            LOGGER.info("{} <{}>", method, path);
+        private Object notImplemented(String method, String container, String path) {
+            LOGGER.info("{} {}:{}", method, container, path);
             throw new NotImplementedException(method);
         }
         
-        public void put(String path, Object data) {
-            notImplemented("PUT", path);
+        public void put(String container, String path, Object data) {
+            notImplemented("PUT", container, path);
         }
         
-        public Object get(String path) {
-            return notImplemented("GET", path);
+        public Object get(String container, String path) {
+            return notImplemented("GET", container, path);
         }
         
-        public void delete(String path) {
-            notImplemented("DELETE", path);
+        public void delete(String container, String path) {
+            notImplemented("DELETE", container, path);
         }
     }
 }
