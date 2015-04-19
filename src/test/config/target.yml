@@ -1,0 +1,13 @@
+stores:
+  "target":
+    api: filesystem
+    options:
+      "filesystem.basedir": target
+
+logging:
+  level: INFO
+  loggers:
+    "de.msquadrat": DEBUG
+    "org.jclouds": DEBUG
+    "jclouds.wire": DEBUG
+    "jclouds.headers": DEBUG
