@@ -7,6 +7,7 @@ import java.util.Properties;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jclouds.ContextBuilder;
 import org.jclouds.blobstore.BlobStoreContext;
+import org.jclouds.blobstore.domain.Blob;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +101,11 @@ public class BlobStoreManager implements Managed {
         }
         
         public Optional<Object> get(String container, String path) {
-            return notImplemented("PUT", container, path);
+            Blob blob = context.getBlobStore().getBlob(container, path);
+            if (blob == null) {
+                return Optional.absent();
+            }
+            return Optional.of(blob.getPayload().getRawContent());
         }
         
         public void delete(String container, String path) {
