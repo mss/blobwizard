@@ -81,8 +81,12 @@ public class BlobStoreManager implements Managed {
 
         @Override
         public void stop() throws Exception {
-            context.close();
-            LOGGER.info("Stopped store {}", name);
+            try {
+                context.close();
+            }
+            finally {
+                LOGGER.info("Stopped store {}", name);
+            }
         }
         
         @Deprecated
