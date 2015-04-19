@@ -65,7 +65,7 @@ public class BlobStoreManager implements Managed {
     }
 
 
-    public class Store implements Managed {
+    public static class Store implements Managed {
         private final String name;
         private final BlobStoreContext context;
 
@@ -128,7 +128,7 @@ public class BlobStoreManager implements Managed {
         }
     }
     
-    public class BlobInputStream extends ProxyInputStream {
+    public static class BlobInputStream extends ProxyInputStream {
         private final Payload payload;
 
         public BlobInputStream(Blob blob) throws IOException {

@@ -75,7 +75,7 @@ public class BlobResource {
     }
 
     
-    public class StreamingBlobOutput implements StreamingOutput {
+    public static class StreamingBlobOutput implements StreamingOutput {
         private final InputStream in;
         
         public StreamingBlobOutput(InputStream in) {
