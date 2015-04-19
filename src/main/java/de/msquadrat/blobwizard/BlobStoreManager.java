@@ -1,13 +1,17 @@
 package de.msquadrat.blobwizard;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.io.input.ProxyInputStream;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jclouds.ContextBuilder;
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.blobstore.domain.Blob;
+import org.jclouds.io.Payload;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,16 +104,42 @@ public class BlobStoreManager implements Managed {
             notImplemented("PUT", container, path);
         }
         
-        public Optional<Object> get(String container, String path) {
+        public Optional<InputStream> get(String container, String path) throws IOException {
             Blob blob = context.getBlobStore().getBlob(container, path);
             if (blob == null) {
                 return Optional.absent();
             }
-            return Optional.of(blob.getPayload().getRawContent());
+            InputStream in = new BlobInputStream(blob);
+            return Optional.of(in);
         }
         
         public void delete(String container, String path) {
             notImplemented("DELETE", container, path);
         }
+    }
+    
+    public class BlobInputStream extends ProxyInputStream {
+        private final Payload payload;
+
+        public BlobInputStream(Blob blob) throws IOException {
+            this(blob.getPayload());
+        }
+        
+        private BlobInputStream(Payload payload) throws IOException {
+            super(payload.openStream());
+            
+            this.payload = payload;
+        }
+        
+        @Override
+        public void close() throws IOException {
+            try {
+                in.close();
+            }
+            finally {
+                payload.close();
+            }
+        }
+        
     }
 }
