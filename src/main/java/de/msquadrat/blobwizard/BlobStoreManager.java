@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.apache.commons.io.input.ProxyInputStream;
 import org.apache.commons.lang3.NotImplementedException;
 import org.jclouds.ContextBuilder;
+import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
 import org.jclouds.blobstore.domain.Blob;
 import org.jclouds.io.Payload;
@@ -105,8 +106,12 @@ public class BlobStoreManager implements Managed {
             throw new NotImplementedException(method);
         }
         
-        public void put(String container, String path, Object data) throws IOException {
-            notImplemented("PUT", container, path);
+        public void put(String container, String path, InputStream in) throws IOException {
+            BlobStore store = context.getBlobStore();
+            Blob blob = store.blobBuilder(path)
+                    .payload(in)
+                    .build();
+            store.putBlob(container, blob);
         }
         
         public Optional<InputStream> get(String container, String path) throws IOException {

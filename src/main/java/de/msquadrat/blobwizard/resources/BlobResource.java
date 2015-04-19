@@ -43,13 +43,15 @@ public class BlobResource {
         }
         return store;
     }
-
+    
     @PUT
     @Timed
     public void putBlob(@PathParam("store") String store,
             @PathParam("container") String container,
-            @PathParam("path") String path, Object data) throws IOException {
-        getStore(store).put(container, path, data);
+            @PathParam("path") String path, InputStream in) throws IOException {
+        trace("PUT", store, container, path);
+        
+        getStore(store).put(container, path, in);
     }
 
     @GET
@@ -57,6 +59,8 @@ public class BlobResource {
     public StreamingOutput getBlob(@PathParam("store") String store,
             @PathParam("container") String container,
             @PathParam("path") String path) throws IOException {
+        trace("GET", store, container, path);
+        
         final InputStream in = getStore(store).get(container, path).orNull();
         if (in == null) {
             LOGGER.debug("Blob {} not found in container {}", path, container);
@@ -71,7 +75,13 @@ public class BlobResource {
     public void deleteBlob(@PathParam("store") String store,
             @PathParam("container") String container,
             @PathParam("path") String path) throws IOException {
+        trace("DELETE", store, container, path);
+        
         getStore(store).delete(container, path);
+    }
+    
+    private void trace(String method, String store, String container, String path) {
+        LOGGER.trace("{} on {}:{}:{}", method, store, container, path);
     }
 
     

@@ -7,7 +7,7 @@ stores:
 logging:
   level: INFO
   loggers:
-    "de.msquadrat": DEBUG
+    "de.msquadrat.blobwizard": TRACE
     "org.jclouds": DEBUG
     "jclouds.wire": DEBUG
     "jclouds.headers": DEBUG
