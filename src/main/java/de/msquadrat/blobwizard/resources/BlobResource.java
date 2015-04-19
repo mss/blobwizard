@@ -48,7 +48,7 @@ public class BlobResource {
     @Timed
     public void putBlob(@PathParam("store") String store,
             @PathParam("container") String container,
-            @PathParam("path") String path, Object data) {
+            @PathParam("path") String path, Object data) throws IOException {
         getStore(store).put(container, path, data);
     }
 
@@ -70,7 +70,7 @@ public class BlobResource {
     @Timed
     public void deleteBlob(@PathParam("store") String store,
             @PathParam("container") String container,
-            @PathParam("path") String path) {
+            @PathParam("path") String path) throws IOException {
         getStore(store).delete(container, path);
     }
 

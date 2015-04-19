@@ -100,7 +100,7 @@ public class BlobStoreManager implements Managed {
             throw new NotImplementedException(method);
         }
         
-        public void put(String container, String path, Object data) {
+        public void put(String container, String path, Object data) throws IOException {
             notImplemented("PUT", container, path);
         }
         
@@ -113,7 +113,7 @@ public class BlobStoreManager implements Managed {
             return Optional.of(in);
         }
         
-        public void delete(String container, String path) {
+        public void delete(String container, String path) throws IOException {
             notImplemented("DELETE", container, path);
         }
     }
