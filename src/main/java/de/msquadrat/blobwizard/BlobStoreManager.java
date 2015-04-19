@@ -45,18 +45,13 @@ public class BlobStoreManager implements Managed {
 
     @Override
     public void stop() throws Exception {
-        Exception ex = new Exception("Exception while stopping stores");
         for (Store store : stores.values()) {
             try {
                 store.stop();
             }
             catch (Exception e) {
-                LOGGER.warn("Exception while stopping store", e);
-                ex.addSuppressed(e);
+                LOGGER.warn("Exception while stopping store: {}", e.getMessage(), e);
             }
-        }
-        if (ex.getSuppressed().length != 0) {
-            throw ex;
         }
     }
     
