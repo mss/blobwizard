@@ -45,8 +45,18 @@ public class BlobStoreManager implements Managed {
 
     @Override
     public void stop() throws Exception {
+        Exception ex = new Exception("Exception while stopping stores");
         for (Store store : stores.values()) {
-            store.stop();
+            try {
+                store.stop();
+            }
+            catch (Exception e) {
+                LOGGER.warn("Exception while stopping store", e);
+                ex.addSuppressed(e);
+            }
+        }
+        if (ex.getSuppressed().length != 0) {
+            throw ex;
         }
     }
     
@@ -54,7 +64,7 @@ public class BlobStoreManager implements Managed {
         return stores.get(name);
     }
 
-    
+
     public class Store implements Managed {
         private final String name;
         private final BlobStoreContext context;
@@ -93,7 +103,7 @@ public class BlobStoreManager implements Managed {
                 LOGGER.info("Stopped store {}", name);
             }
         }
-        
+
         @Deprecated
         private Optional<Object> notImplemented(String method, String container, String path) {
             LOGGER.info("{}.{} {}:{}", name, method, container, path);
