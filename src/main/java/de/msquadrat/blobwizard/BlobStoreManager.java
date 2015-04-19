@@ -124,7 +124,7 @@ public class BlobStoreManager implements Managed {
         }
         
         public void delete(String container, String path) throws IOException {
-            notImplemented("DELETE", container, path);
+            context.getBlobStore().removeBlob(container, path);
         }
     }
     
