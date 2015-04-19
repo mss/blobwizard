@@ -41,7 +41,7 @@ public class BlobStoreManager implements Managed {
     @Override
     public void stop() throws Exception {
         for (Store store : stores.values()) {
-            store.start();
+            store.stop();
         }
     }
     
