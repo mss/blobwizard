@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.input.ProxyInputStream;
-import org.apache.commons.lang3.NotImplementedException;
 import org.jclouds.ContextBuilder;
 import org.jclouds.blobstore.BlobStore;
 import org.jclouds.blobstore.BlobStoreContext;
@@ -100,12 +99,6 @@ public class BlobStoreManager implements Managed {
             }
         }
 
-        @Deprecated
-        private Optional<Object> notImplemented(String method, String container, String path) {
-            LOGGER.info("{}.{} {}:{}", name, method, container, path);
-            throw new NotImplementedException(method);
-        }
-        
         public void put(String container, String path, InputStream in) throws IOException {
             BlobStore store = context.getBlobStore();
             Blob blob = store.blobBuilder(path)
