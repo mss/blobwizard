@@ -1,4 +1,4 @@
-package de.msquadrat.blobwizard.resources;
+package de.msquadrat.blobwizard;
 
 import java.io.IOException;
 import java.io.InputStream;
