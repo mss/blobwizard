@@ -104,23 +104,40 @@ public class BlobStoreManager implements Managed {
             Blob blob = store.blobBuilder(path)
                     .payload(in)
                     .build();
-            store.putBlob(container, blob);
+            try {
+                store.putBlob(container, blob);
+            }
+            catch (Exception e) {
+                throw BlobException.forPut(this, container, path, e);
+            }
         }
-        
+
         public Optional<InputStream> get(String container, String path) throws IOException {
-            Blob blob = context.getBlobStore().getBlob(container, path);
+            Blob blob;
+            try {
+                blob = context.getBlobStore().getBlob(container, path);
+            }
+            catch (Exception e) {
+                throw BlobException.forGet(this, container, path, e);
+            }
+            
             if (blob == null) {
                 return Optional.absent();
             }
             InputStream in = new BlobInputStream(blob);
             return Optional.of(in);
         }
-        
+
         public void delete(String container, String path) throws IOException {
-            context.getBlobStore().removeBlob(container, path);
+            try {
+                context.getBlobStore().removeBlob(container, path);
+            }
+            catch (Exception e) {
+                throw BlobException.forDelete(this, container, path, e);
+            }
         }
     }
-    
+
     public static class BlobInputStream extends ProxyInputStream {
         private final Payload payload;
 
@@ -143,6 +160,42 @@ public class BlobStoreManager implements Managed {
                 payload.close();
             }
         }
-        
+    }
+
+    public static class BlobException extends IOException {
+        private static final long serialVersionUID = 1L;
+
+        public static BlobException forPut(Store store, String container, String path, Throwable cause) {
+            return forRequest("PUT", store, container, path, cause);
+        }
+
+        public static BlobException forGet(Store store, String container, String path, Throwable cause) {
+            return forRequest("GET", store, container, path, cause);
+        }
+
+        public static BlobException forDelete(Store store, String container, String path, Throwable cause) {
+            return forRequest("DELETE", store, container, path, cause);
+        }
+
+        private static BlobException forRequest(String method, Store store, String container, String path, Throwable cause) {
+            StringBuilder msg = new StringBuilder();
+            msg.append("Failed to ")
+                .append(method)
+                .append(" ")
+                .append(store.name)
+                .append(":")
+                .append(container)
+                .append(":")
+                .append(path);
+            if (cause != null) {
+                msg.append(": ")
+                    .append(cause.getMessage());
+            }
+            return new BlobException(msg.toString(), cause);
+        }
+
+        private BlobException(String message, Throwable cause) {
+            super(message, cause);
+        }
     }
 }

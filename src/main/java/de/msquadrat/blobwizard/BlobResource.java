@@ -6,6 +6,7 @@ import java.io.OutputStream;
 
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.NotFoundException;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -22,6 +23,7 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.common.io.ByteStreams;
 
 import de.msquadrat.blobwizard.BlobStoreManager;
+import de.msquadrat.blobwizard.BlobStoreManager.BlobException;
 import de.msquadrat.blobwizard.BlobStoreManager.Store;
 
 @Path("/blob/{store}/{container}/{path:.+}")
@@ -51,7 +53,12 @@ public class BlobResource {
             @PathParam("path") String path, InputStream in) throws IOException {
         trace("PUT", store, container, path);
         
-        getStore(store).put(container, path, in);
+        try {
+            getStore(store).put(container, path, in);
+        }
+        catch (BlobException e) {
+            throw new InternalServerErrorException(e);
+        }
     }
 
     @GET
@@ -61,7 +68,13 @@ public class BlobResource {
             @PathParam("path") String path) throws IOException {
         trace("GET", store, container, path);
         
-        final InputStream in = getStore(store).get(container, path).orNull();
+        final InputStream in;
+        try {
+            in = getStore(store).get(container, path).orNull();
+        }
+        catch (BlobException e) {
+            throw new InternalServerErrorException(e);
+        }
         if (in == null) {
             LOGGER.debug("Blob {} not found in container {}", path, container);
             throw new NotFoundException();
@@ -77,7 +90,12 @@ public class BlobResource {
             @PathParam("path") String path) throws IOException {
         trace("DELETE", store, container, path);
         
-        getStore(store).delete(container, path);
+        try {
+            getStore(store).delete(container, path);
+        }
+        catch (BlobException e) {
+            throw new InternalServerErrorException(e);
+        }
     }
     
     private void trace(String method, String store, String container, String path) {
