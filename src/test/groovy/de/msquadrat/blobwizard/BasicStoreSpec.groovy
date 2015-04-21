@@ -23,6 +23,7 @@ class BasicStoreSpec extends Specification {
         config.getApi() >> "filesystem"
         config.getOptions() >> ["filesystem.basedir": target.toString()]
         store = new BlobStoreManager.Store("target", config)
+        store.start()
     }
 
     def "PUT creates file"() {
