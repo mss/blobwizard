@@ -38,7 +38,6 @@ class BasicStoreSpec extends Specification {
             target = target.parent
         }
         container = Files.createTempDirectory(target, "test-container-")
-        container.toFile().deleteOnExit()
         containerName = container.toFile().name
 
         ServerConfiguration.Store config = Stub()
@@ -46,6 +45,12 @@ class BasicStoreSpec extends Specification {
         config.getOptions() >> ["filesystem.basedir": target.toString()]
         store = new BlobStoreManager.Store("target", config)
         store.start()
+    }
+
+    def cleanup() {
+        if (!container.deleteDir()) {
+            throw new IOException("Failed to remove test container " + containerName);
+        }
     }
 
     def "PUT creates file"() {
