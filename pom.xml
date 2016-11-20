@@ -19,7 +19,7 @@
         <application.packageName>${project.groupId}</application.packageName>
         <application.mainClass>${application.packageName}.Server</application.mainClass>
 
-        <jclouds.version>1.9.2</jclouds.version>
+        <jclouds.version>2.0.0</jclouds.version>
         <dropwizard.version>0.8.5</dropwizard.version>
 
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -74,30 +74,6 @@
                     <artifactId>aopalliance</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jclouds.api</groupId>
-            <artifactId>filesystem</artifactId>
-            <version>${jclouds.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.ws.rs</groupId>
-                    <artifactId>jsr311-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.annotation</groupId>
-                    <artifactId>jsr250-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.inject</groupId>
-                    <artifactId>javax.inject</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>aopalliance</groupId>
-                    <artifactId>aopalliance</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
