@@ -20,7 +20,7 @@
         <application.mainClass>${application.packageName}.Server</application.mainClass>
 
         <jclouds.version>1.9.2</jclouds.version>
-        <dropwizard.version>0.8.1</dropwizard.version>
+        <dropwizard.version>0.8.5</dropwizard.version>
 
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
