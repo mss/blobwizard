@@ -10,6 +10,6 @@ daemon to play around with.
 To build and start try this:
 
     mvn clean package
-    java -jar target/blobwizard-*.jar server src/test/config/target.yml
+    java -jar target/blobwizard.jar server src/test/config/target.yml
     curl -v http://127.0.0.1:8080/blob/target/classes/banner.txt
 
