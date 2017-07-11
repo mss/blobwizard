@@ -93,14 +93,14 @@ public class BlobResource {
         
         final InputStream in;
         try {
-            in = getStore(store).get(container, path).orNull();
+            in = getStore(store).get(container, path).orElseThrow(NotFoundException::new);
         }
         catch (BlobException e) {
             throw new InternalServerErrorException(e);
         }
-        if (in == null) {
+        catch (NotFoundException e) {
             LOGGER.debug("Blob {} not found in container {}", path, container);
-            throw new NotFoundException();
+            throw e;
         }
         
         return new StreamingBlobOutput(in);

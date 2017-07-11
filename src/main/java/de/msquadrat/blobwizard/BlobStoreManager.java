@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 
 import org.apache.commons.io.input.ProxyInputStream;
@@ -38,7 +39,6 @@ import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
@@ -144,7 +144,7 @@ public class BlobStoreManager implements Managed {
             }
             
             if (blob == null) {
-                return Optional.absent();
+                return Optional.empty();
             }
             InputStream in = new BlobInputStream(blob);
             return Optional.of(in);
